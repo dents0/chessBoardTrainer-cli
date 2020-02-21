@@ -191,7 +191,7 @@ def practice_board():
     """
     Provides a menu with practice options
     """
-    global score
+    global score, max_score
     print("\n\n\n\nIMPROVE YOUR KNOWLEDGE OF THE CHESS BOARD")
     print("Select a practice mode:")
     print("1. Square's Color")
