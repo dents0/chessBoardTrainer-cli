@@ -64,7 +64,7 @@ max_score = 0
 
 def generate_square():
     """
-    Selects a random square
+    Returns a random chessboard square
     """
     return choice([item for item in square_colors.keys()])
 
@@ -82,7 +82,7 @@ def color_test(square, color):
 
 def test_colors():
     """
-    Tests the knowledge of the square colors
+    What color is a given square?
     """
     global score, max_score
     square = generate_square()
@@ -94,7 +94,7 @@ def test_colors():
         again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
     else:
         print("Wrong! The right answer is '{}'.".format(square_colors[square]))
-        again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
+        again = input("Max Score: {}\nPlay again? (y/n): ".format(score)).lower()
         max_score = score
         score = 0
     if again == 'y' or again == 'yes':
@@ -106,7 +106,7 @@ def test_colors():
 
 def diagonals_test_short():
     """
-    Test the knowledge of the diagonals
+    Which diagonal(s) are crossing a given square?
     """
     global score, max_score
     square = generate_square()
@@ -121,7 +121,7 @@ def diagonals_test_short():
             again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
         else:
             print("Wrong! The correct answer is '{}'.".format(correct[0]))
-            again = input("Score: {}\nPlay again? (y/n): ".format(score))
+            again = input("Max Score: {}\nPlay again? (y/n): ".format(score))
             max_score = score
             score = 0
     else:
@@ -139,7 +139,7 @@ def diagonals_test_short():
             again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()  
         else:
             print("Wrong! The right answer is: '{}', '{}'.".format(correct[0], correct[1]))
-            again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
+            again = input("Max Score: {}\nPlay again? (y/n): ".format(score)).lower()
             max_score = score
             score = 0
         if again == 'y' or again == 'yes':
@@ -150,7 +150,7 @@ def diagonals_test_short():
 
 def diagonals_test_long():
     """
-    Tests the knowledge of the diagonal squares
+    Which squares are included in the diagonal(s) that are crossing a given square?
     """
     global score, max_score
     square = generate_square()
@@ -164,7 +164,7 @@ def diagonals_test_long():
             again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
         else:
             print("Wrong! The correct answer is '{}'.".format(square_diagonals[square][0]))
-            again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
+            again = input("Max Score: {}\nPlay again? (y/n): ".format(score)).lower()
             max_score = score
             score = 0
     else:
@@ -178,13 +178,45 @@ def diagonals_test_long():
             again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()  
         else:
             print("Wrong! The right answer is: '{}', '{}'.".format(square_diagonals[square][0], square_diagonals[square][1]))
-            again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
+            again = input("Max Score: {}\nPlay again? (y/n): ".format(score)).lower()
             max_score = score
             score = 0
         if again == 'y' or again == 'yes':
             return diagonals_test_long()
         else:
             return practice_board()
+
+
+def common_square():
+    """
+    Which square do the mentioned diagonals cross?
+    """
+    global score, max_score
+    square = generate_square()
+    given_diagonals = []
+    for item in diagonals:
+        if square in item.split('-'):
+            #print(item)
+            diagonal = item[:2] + item[-2:]
+            given_diagonals.append(diagonal)
+    #print(given_diagonals)
+    if len(given_diagonals) < 2:
+        return common_square()
+    print("\nName the square that is crossed by diagonals '{}' and '{}'".format(given_diagonals[0], given_diagonals[1]))
+    answer = input("Your answer: ").lower()
+    if answer == square:
+        score += 15
+        print("Correct!")
+        again = input("Score: {}\nPlay again? (y/n): ".format(score)).lower()
+    else:
+        print("Wrong! The right answer is '{}'".format(square))
+        again = input("Max Score: {}\nPlay again? (y/n): ".format(score)).lower()
+        max_score = score
+        score = 0
+    if again == 'y' or again == 'yes':
+        return common_square()
+    else:
+        return practice_board()
 
 
 def practice_board():
@@ -197,7 +229,8 @@ def practice_board():
     print("1. Square's Color")
     print("2. Name Diagonals")
     print("3. Diagonal's Squares")
-    print("4. Exit")
+    print("4. Common Square")
+    print("5. Exit")
     opt = input("Your choice: ")
     if opt == '1':
         print()
@@ -209,6 +242,9 @@ def practice_board():
         print()
         return diagonals_test_long()
     elif opt == '4':
+        print()
+        return common_square()
+    elif opt == '5':
         if score > 0:
             max_score = score
         print("\nYour max score is {}\nGoodbye!".format(max_score))
@@ -219,3 +255,5 @@ def practice_board():
 
 
 practice_board()
+
+
